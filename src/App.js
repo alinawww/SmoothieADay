@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react';
 import axios from 'axios';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import logo from './logo.svg';
 import './App.css';
 
@@ -66,25 +67,32 @@ class Smoothie extends React.Component {
                 shouldBeShown = true;
             }
             if (shouldBeShown) {
-                let ingredientLines = [];
-                {ingredients.forEach(function(ingredient, index) {
-                    // <IngredientLine ingredientText={ingredient.text} />
-                    ingredientLines.push(<IngredientLine ingredientText={ingredient.text} key={index}/>)
-                })}
+                // let ingredientLines = [];
+                //
+                // {ingredients.forEach(function(ingredient, index) {
+                //     ingredientLines.push(<IngredientLine ingredientText={ingredient.text} key={index}/>)
+                // })}
                 return (
                     <div>
                       <img className="smoothie__image" width="100" src={image} />
-                        <h2 className="smoothie__title">{name}</h2>
+                        <h2 className="smoothie__title">
+                          {name}
+                        </h2>
                         <p className="smoothie__ingredients">
-                          {ingredientLines}
+                          {ingredients.map(function(ingredient) {
+                              return (
+                                <ReactCSSTransitionGroup transitionName="example"
+                                  transitionAppear={true} transitionAppearTimeout={1500}>
+                                  <IngredientLine ingredientText={ingredient.text} key={ingredient}/>
+                                </ReactCSSTransitionGroup>
+                              )
+                          })}
                         </p>
                       <Button value={this.state.randomNumber} randomNumber={this.handleRandomNumber}/>
                     </div>
                 );
             }
-
         }
-
     }
 }
 
