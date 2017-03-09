@@ -9,7 +9,9 @@
   "devDependencies": {
     "axios": "^0.15.3",
     "react-addons-css-transition-group": "^15.4.2",
-    "react-scripts": "0.9.4"
+    "react-addons-transition-group": "^15.4.2",
+    "react-scripts": "0.9.4",
+    "react-transitions": "0.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

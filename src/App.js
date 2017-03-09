@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react';
+// import ReactDOM from 'react';
 import axios from 'axios';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import logo from './logo.svg';
+import ReactTransitionGroup from 'react-addons-transition-group';
+import ReactTransitions from 'react-transitions';
+import 'react-transitions/dist/animations.css';
 import './App.css';
 
 class Button extends React.Component {
@@ -51,7 +53,7 @@ class Smoothie extends React.Component {
     }
     render() {
         const selectedSmoothie = this.props.smoothies[this.state.randomNumber] ? this.props.smoothies[this.state.randomNumber] : null;
-        if (selectedSmoothie !== null) {
+        if (typeof(selectedSmoothie) !== 'undefined' || typeof(selectedSmoothie) !== null) {
             const smoothieRecipe = selectedSmoothie.recipe
             const name = smoothieRecipe.label;
             const image = smoothieRecipe.image;
@@ -72,24 +74,30 @@ class Smoothie extends React.Component {
                 // {ingredients.forEach(function(ingredient, index) {
                 //     ingredientLines.push(<IngredientLine ingredientText={ingredient.text} key={index}/>)
                 // })}
+
                 return (
-                    <div>
-                      <img className="smoothie__image" width="100" src={image} />
+                  <ReactTransitions
+                      transition={ "sides" }
+                      width={ 500 }
+                      height={ 900 }
+                      key={this.state.randomNumber}
+                  >
+                    <div key={this.state.randomNumber}>
+                      <img className="smoothie__image" width="100" src={image} key={this.state.randomNumber}/>
                         <h2 className="smoothie__title">
                           {name}
                         </h2>
-                        <p className="smoothie__ingredients">
-                          {ingredients.map(function(ingredient) {
-                              return (
-                                <ReactCSSTransitionGroup transitionName="example"
-                                  transitionAppear={true} transitionAppearTimeout={1500}>
-                                  <IngredientLine ingredientText={ingredient.text} key={ingredient}/>
-                                </ReactCSSTransitionGroup>
-                              )
-                          })}
-                        </p>
-                      <Button value={this.state.randomNumber} randomNumber={this.handleRandomNumber}/>
+                        <Button value={this.state.randomNumber} randomNumber={this.handleRandomNumber}/>
+                        <div className="smoothie__ingredients">
+                          {ingredients.map((ingredient, i) => (
+                                  <div key={i}>
+                                    {ingredient.text}
+                                  </div>
+                          ))}
+
+                        </div>
                     </div>
+                    </ReactTransitions>
                 );
             }
         }
@@ -102,6 +110,7 @@ var App = React.createClass({
   getInitialState: function() {
     return {
       smoothies: [],
+      id: 1,
       loading: true
     }
   },
@@ -109,11 +118,13 @@ var App = React.createClass({
   componentDidMount: function() {
     // Is there a React-y way to avoid rebinding `this`? fat arrow?
     var th = this;
+    let id = 0;
     this.serverRequest =
       axios.get(this.props.source)
         .then(function(result) {
           th.setState({
             smoothies: result.data.hits,
+            id: id + 1,
             loading: false,
           });
         })
@@ -129,8 +140,10 @@ var App = React.createClass({
     }
     else {
       return (
-        <div className="smoothie">
-          <Smoothie smoothies={this.state.smoothies} />
+        <div className="smoothie" key={this.state.id}>
+
+          <Smoothie smoothies={this.state.smoothies} key={this.state.id} />
+
         </div>
       )
     }
