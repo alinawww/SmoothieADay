@@ -4,7 +4,7 @@ import axios from 'axios';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ReactTransitionGroup from 'react-addons-transition-group';
 import ReactTransitions from 'react-transitions';
-import 'react-transitions/dist/animations.css';
+import 'react-transitions/dist/animations.css'; //https://szchenghuang.github.io/react-transitions/
 import './App.css';
 
 class Button extends React.Component {
